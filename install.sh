@@ -16,49 +16,63 @@ xbps-install -y void-repo-nonfree
 xbps-install -Sy nvidia
 
 # flatpak stuff
-su mig -c 'flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo'
+sudo -i -u mig bash << EOF
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+EOF
 # reboot
 
 # fonts
 xbps-install -y font-firacode nerd-fonts google-fonts-ttf cantarell-fonts
 
 # visual session
-su mig -c 'git clone --depth=1 https://github.com/migue07juegos/void-packages.git -b no-merge'
-su mig -c 'cd void-packages'
-su mig -c './xbps-src binary-bootstrap'
-su mig -c 'xgensum -fi niri'
-su mig -c './xbps-src pkg niri'
-su mig -c './xbps-src pkg swayosd'
-su mig -c './xbps-src pkg an-anime-game-launcher'
-su mig -c './xbps-src pkg yazi'
-su mig -c 'xi -y niri'
-su mig -c 'xi -y swayosd'
-su mig -c 'xi -y an-anime-game-launcher'
-su mig -c 'xi -y yazi'
-su mig -c 'cd /home/mig'
-su mig -c 'rm -rfd void-packages/'
-su mig -c 'git clone --depth=1 https://github.com/migue07juegos/void-packages.git -b kickoff'
-su mig -c 'cd void-packages'
-su mig -c './xbps-src binary-bootstrap'
-su mig -c './xbps-src pkg kickoff'
-su mig -c 'xi -y kickoff'
-su mig -c 'cd /home/mig'
-su mig -c 'rm -rfd void-packages/'
+sudo -i -u mig bash << EOF
+cd /home/mig
+git clone --depth=1 https://github.com/migue07juegos/void-packages.git -b no-merge
+cd void-packages
+./xbps-src binary-bootstrap
+xgensum -fi niri
+./xbps-src pkg niri
+./xbps-src pkg swayosd
+./xbps-src pkg an-anime-game-launcher
+./xbps-src pkg yazi
+EOF
+cd /home/mig/void-packages/
+xi -y niri
+xi -y swayosd
+xi -y an-anime-game-launcher
+xi -y yazi
+cd /home/mig
+rm -rfd void-packages/
+sudo -i -u mig bash << EOF
+cd /home/mig
+git clone --depth=1 https://github.com/migue07juegos/void-packages.git -b kickoff
+cd void-packages
+./xbps-src binary-bootstrap
+./xbps-src pkg kickoff
+EOF
+cd /home/mig/void-packages/
+xi -y kickoff
+cd /home/mig
+rm -rfd void-packages/
 
 # apps
 xbps-install -y foot neovim mpv thunar firefox keepassxc obs qalculate-gtk PrismLauncher transmission-gtk
 xbps-install -y ffmpeg waybar nomacs kimageformats libreoffice xdg-utils dragon npm lua54
 
 # flatpak apps
-su mig -c 'flatpak install com.github.tchx84.Flatseal'
-su mig -c 'flatpak install flathub com.valvesoftware.Steam'
-su mig -c 'flatpak install flathub com.heroicgameslauncher.hgl'
-su mig -c 'flatpak install com.github.iwalton3.jellyfin-media-player'
-su mig -c 'flatpak install net.epson.epsonscan2'
-su mig -c 'flatpak install org.localsend.localsend_app'
-su mig -c 'flatpak install org.tenacityaudio.Tenacity'
-su mig -c 'flatpak install sh.ppy.osu'
+sudo -i -u mig bash << EOF
+flatpak install com.github.tchx84.Flatseal
+flatpak install flathub com.valvesoftware.Steam
+flatpak install flathub com.heroicgameslauncher.hgl
+flatpak install com.github.iwalton3.jellyfin-media-player
+flatpak install net.epson.epsonscan2
+flatpak install org.localsend.localsend_app
+flatpak install org.tenacityaudio.Tenacity
+flatpak install sh.ppy.osu
+EOF
 
 # rust sdk
 xbps-install -y rustup
-su mig -c 'rustup-init'
+sudo -i -u mig bash << EOF
+rustup-init
+EOF
