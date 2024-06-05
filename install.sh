@@ -70,13 +70,14 @@ flatpak install sh.ppy.osu
 EOF
 
 # configuration files
+# fix using '' inside another ''
 sudo -i -u mig bash << EOF
 echo 'export PATH="$PATH:$HOME/.local/bin"' >> .bashrc
 echo 'alias reboot="loginctl reboot"' >> .bashrc
 echo 'alias poweroff="loginctl poweroff"' >> .bashrc
 echo 'PS1="\[\e[0m\][\[\e[1;36m\]\u\[\e[0m\]@\[\e[1;36m\]\h\[\e[0m\] \W]\$ "' >> .bashrc
 echo 'export GPG_TTY=$(tty)' >> .bashrc
-echo 'export XDG_CONFIG_DIRS="$HOME/.config"'
+echo 'export XDG_CONFIG_DIRS="$HOME/.config"' >> .bashrc
 
 cd
 mkdir -p .local/bin
