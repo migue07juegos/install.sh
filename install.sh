@@ -1,10 +1,8 @@
 #!/bin/bash
 xbps-install -Syu
-xbps-install -y git wget xtools dbus elogind NetworkManager chrony cups nftables polkit 
+xbps-install -y wget xtools dbus elogind chrony cups nftables polkit 
 ln -s /etc/sv/cups /var/service/
-ln -s /etc/sv/dbus /var/service/
 ln -s /etc/sv/elogind /var/service/
-ln -s /etc/sv/NetworkManager /var/service/
 ln -s /etc/sv/chronyd /var/service/
 ln -s /etc/sv/nftables /var/service/
 ln -s /etc/sv/polkitd /var/service/
@@ -56,8 +54,8 @@ cd /home/mig
 rm -rfd void-packages/
 
 # apps
-xbps-install -y foot neovim mpv thunar firefox keepassxc obs qalculate-gtk PrismLauncher transmission-gtk
-xbps-install -y ffmpeg waybar nomacs kimageformats libreoffice xdg-utils dragon npm lua54
+xbps-install -y foot neovim mpv Thunar firefox keepassxc obs qalculate-gtk PrismLauncher transmission-gtk
+xbps-install -y ffmpeg Waybar nomacs kimageformats libreoffice xdg-utils dragon npm lua rustup
 
 # flatpak apps
 sudo -i -u mig bash << EOF
@@ -71,8 +69,22 @@ flatpak install org.tenacityaudio.Tenacity
 flatpak install sh.ppy.osu
 EOF
 
-# rust sdk
-xbps-install -y rustup
+# configuration files
 sudo -i -u mig bash << EOF
-rustup-init
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> .bashrc
+echo 'alias reboot="loginctl reboot"' >> .bashrc
+echo 'alias poweroff="loginctl poweroff"' >> .bashrc
+echo 'PS1="\[\e[0m\][\[\e[1;36m\]\u\[\e[0m\]@\[\e[1;36m\]\h\[\e[0m\] \W]\$ "' >> .bashrc
+echo 'export GPG_TTY=$(tty)' >> .bashrc
+echo 'export XDG_CONFIG_DIRS="$HOME/.config"'
+
+cd
+mkdir -p .local/bin
+
+git clone --depth=1 https://github.com/migue07juegos/dotfiles.git
+cd dotfiles
+mv .local/bin/* /home/mig/.local/bin/
+mv .config/* /home/mig/.config/
+cd
+rm -rfd dotfiles/
 EOF
